@@ -1,26 +1,94 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --color-bg: #0a0e10;
+  --color-bg-elevated: #11171a;
+  --color-bg-card: #131a1e;
+  --color-border: #1f2a30;
+  --color-border-strong: #2a3940;
+  --color-text: #e6edf0;
+  --color-text-muted: #9aa8af;
+  --color-text-faint: #6b7980;
+  --color-brand: #00adb5;
+  --color-brand-soft: #18737b;
+  --color-brand-glow: #00adb533;
+  --color-accent: #4ade80;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--color-bg);
+  color: var(--color-text);
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-brand-glow);
+  color: var(--color-text);
+}
+
+@utility hero-grid {
+  background-image:
+    radial-gradient(circle at 50% 0%, color-mix(in oklab, var(--color-brand) 18%, transparent), transparent 60%),
+    linear-gradient(to right, color-mix(in oklab, var(--color-border) 50%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-border) 50%, transparent) 1px, transparent 1px);
+  background-size: 100% 100%, 56px 56px, 56px 56px;
+  background-position: 0 0, 0 0, 0 0;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 40%, transparent 80%);
+}
+
+.wordmark-enter {
+  --enter-delay: 0s;
+  display: inline-block;
+  opacity: 0;
+  animation: wordmark-enter 520ms cubic-bezier(0.22, 1, 0.36, 1) var(--enter-delay) forwards;
+}
+
+@keyframes wordmark-enter {
+  from { opacity: 0; transform: translateY(-18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.wordmark-tile {
+  --tile-rotate: 0deg;
+  transform: rotate(var(--tile-rotate));
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 220ms ease;
+  background:
+    linear-gradient(
+      170deg,
+      color-mix(in oklab, var(--color-brand) 100%, white 12%) 0%,
+      var(--color-brand) 55%,
+      color-mix(in oklab, var(--color-brand) 100%, black 10%) 100%
+    );
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.16),
+    0 8px 24px -8px rgba(0, 173, 181, 0.35);
+}
+
+.wordmark-tile:hover {
+  transform: translateY(-8px) rotate(0deg) scale(1.04);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.16),
+    0 14px 32px -8px rgba(0, 173, 181, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wordmark-enter {
+    animation: none;
+    opacity: 1;
+  }
+  .wordmark-tile {
+    transition: none;
+  }
 }
