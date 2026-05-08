@@ -1,4 +1,5 @@
 import type { StructureResolver } from "sanity/structure";
+import { apiVersion } from "./env";
 
 export const structure: StructureResolver = (S) =>
   S.list()
@@ -16,6 +17,7 @@ export const structure: StructureResolver = (S) =>
                   S.documentList()
                     .title("Open leads")
                     .schemaType("lead")
+                    .apiVersion(apiVersion)
                     .filter(
                       `_type == "lead" && status in ["new", "contacted", "qualified"]`
                     )
@@ -29,6 +31,7 @@ export const structure: StructureResolver = (S) =>
                   S.documentList()
                     .title("Active clients")
                     .schemaType("client")
+                    .apiVersion(apiVersion)
                     .filter(`_type == "client" && status == "active"`)
                 ),
               S.listItem()
@@ -37,6 +40,7 @@ export const structure: StructureResolver = (S) =>
                   S.documentList()
                     .title("Prospects")
                     .schemaType("client")
+                    .apiVersion(apiVersion)
                     .filter(`_type == "client" && status == "prospect"`)
                 ),
               S.listItem()
@@ -45,6 +49,7 @@ export const structure: StructureResolver = (S) =>
                   S.documentList()
                     .title("Care plan subscribers")
                     .schemaType("client")
+                    .apiVersion(apiVersion)
                     .filter(`_type == "client" && carePlan == true`)
                 ),
             ])
@@ -62,6 +67,7 @@ export const structure: StructureResolver = (S) =>
                   S.documentList()
                     .title("In flight")
                     .schemaType("project")
+                    .apiVersion(apiVersion)
                     .filter(
                       `_type == "project" && status in ["scoping", "active"]`
                     )
@@ -72,6 +78,7 @@ export const structure: StructureResolver = (S) =>
                   S.documentList()
                     .title("Launched")
                     .schemaType("project")
+                    .apiVersion(apiVersion)
                     .filter(`_type == "project" && status == "launched"`)
                 ),
               S.listItem()
@@ -80,6 +87,7 @@ export const structure: StructureResolver = (S) =>
                   S.documentList()
                     .title("Done")
                     .schemaType("project")
+                    .apiVersion(apiVersion)
                     .filter(`_type == "project" && status == "done"`)
                 ),
             ])
@@ -97,6 +105,7 @@ export const structure: StructureResolver = (S) =>
                   S.documentList()
                     .title("Open invoices")
                     .schemaType("invoice")
+                    .apiVersion(apiVersion)
                     .filter(
                       `_type == "invoice" && status in ["sent", "overdue"]`
                     )
@@ -110,6 +119,7 @@ export const structure: StructureResolver = (S) =>
                   S.documentList()
                     .title("Draft invoices")
                     .schemaType("invoice")
+                    .apiVersion(apiVersion)
                     .filter(`_type == "invoice" && status == "draft"`)
                 ),
               S.listItem()
@@ -118,6 +128,7 @@ export const structure: StructureResolver = (S) =>
                   S.documentList()
                     .title("Paid invoices")
                     .schemaType("invoice")
+                    .apiVersion(apiVersion)
                     .filter(`_type == "invoice" && status == "paid"`)
                     .defaultOrdering([
                       { field: "paidDate", direction: "desc" },
@@ -130,6 +141,7 @@ export const structure: StructureResolver = (S) =>
                   S.documentList()
                     .title("Unbilled time entries")
                     .schemaType("timeEntry")
+                    .apiVersion(apiVersion)
                     .filter(`_type == "timeEntry" && billed != true`)
                     .defaultOrdering([
                       { field: "date", direction: "desc" },
@@ -141,6 +153,8 @@ export const structure: StructureResolver = (S) =>
                   S.documentList()
                     .title("Time entries")
                     .schemaType("timeEntry")
+                    .apiVersion(apiVersion)
+                    .filter(`_type == "timeEntry"`)
                     .defaultOrdering([
                       { field: "date", direction: "desc" },
                     ])
@@ -154,6 +168,8 @@ export const structure: StructureResolver = (S) =>
           S.documentList()
             .title("Monthly reviews")
             .schemaType("review")
+            .apiVersion(apiVersion)
+            .filter(`_type == "review"`)
             .defaultOrdering([{ field: "month", direction: "desc" }])
         ),
 
