@@ -6,12 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sanity:extract": "sanity schema extract --enforce-required-fields --path=./schema.json",
+    "sanity:types": "bun run sanity:extract && sanity typegen generate"
   },
   "dependencies": {
+    "@sanity/vision": "^5.24.0",
     "next": "16.2.4",
+    "next-sanity": "^12.4.5",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "sanity": "^5.24.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

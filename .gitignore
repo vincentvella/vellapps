@@ -36,6 +36,10 @@ yarn-error.log*
 # vercel
 .vercel
 
+# sanity build artifact (regenerate via `bun run sanity:types`)
+/schema.json
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.env*.local
