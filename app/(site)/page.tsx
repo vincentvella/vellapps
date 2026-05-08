@@ -154,14 +154,28 @@ export default async function Home() {
           </div>
 
           <ul className="grid gap-5 sm:grid-cols-2">
-            {work.map((p) => {
+            {work.map((p, i) => {
+              const dims =
+                p.image?.asset && "metadata" in p.image.asset
+                  ? p.image.asset.metadata?.dimensions
+                  : undefined;
+              // Anything narrower than ~landscape is treated as portrait so
+              // mobile-app screenshots aren't cropped by object-cover.
+              const isPortrait = dims ? dims.aspectRatio < 1.2 : false;
               const imageUrl = p.image
-                ? urlForImage(p.image).width(1280).height(800).fit("crop").url()
+                ? isPortrait
+                  ? urlForImage(p.image).width(800).fit("max").url()
+                  : urlForImage(p.image)
+                      .width(1280)
+                      .height(800)
+                      .fit("crop")
+                      .url()
                 : null;
               const Wrapper = p.href ? "a" : "div";
               const wrapperProps = p.href
                 ? { href: p.href, target: "_blank", rel: "noopener noreferrer" }
                 : {};
+
               return (
                 <li key={p._id}>
                   <Wrapper
@@ -170,13 +184,34 @@ export default async function Home() {
                       p.href ? "hover:border-brand" : "hover:border-border-strong"
                     }`}
                   >
-                    {imageUrl ? (
+                    {imageUrl && isPortrait ? (
+                      <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-gradient-to-br from-bg-card to-bg flex items-center justify-center">
+                        <div
+                          className="relative h-[88%] aspect-[9/19.5] rounded-[14%/6%] border-[3px] border-border-strong bg-bg shadow-[0_18px_50px_-10px_rgba(0,0,0,0.55)] overflow-hidden group-hover:-translate-y-0.5 transition-transform duration-500"
+                          aria-hidden="false"
+                        >
+                          <span
+                            aria-hidden
+                            className="absolute top-[2.5%] left-1/2 -translate-x-1/2 w-[34%] h-[2.5%] rounded-full bg-border-strong z-10"
+                          />
+                          <Image
+                            src={imageUrl}
+                            alt={`${p.title} — ${p.tagline}`}
+                            fill
+                            sizes="(min-width: 640px) 18vw, 36vw"
+                            priority={i < 2}
+                            className="object-cover"
+                          />
+                        </div>
+                      </div>
+                    ) : imageUrl ? (
                       <div className="relative aspect-[16/10] bg-bg overflow-hidden border-b border-border">
                         <Image
                           src={imageUrl}
                           alt={`${p.title} — ${p.tagline}`}
                           fill
                           sizes="(min-width: 640px) 50vw, 100vw"
+                          priority={i < 2}
                           className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
                         />
                       </div>

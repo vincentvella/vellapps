@@ -3,7 +3,8 @@ export const HOMEPAGE_QUERY = `{
     _id, title, summary, body
   },
   "work": *[_type == "workItem" && visible != false] | order(order asc, _createdAt asc) {
-    _id, title, tagline, href, body, stack, image
+    _id, title, tagline, href, body, stack,
+    image{ ..., asset->{ _id, metadata { dimensions { width, height, aspectRatio } } } }
   },
   "process": *[_type == "processStep"] | order(order asc, _createdAt asc) {
     _id, title, body
@@ -33,7 +34,18 @@ export type HomepageContent = {
 };
 
 export type SanityImage = {
-  asset: { _ref: string; _type: "reference" };
+  asset:
+    | { _ref: string; _type: "reference" }
+    | {
+        _id: string;
+        metadata?: {
+          dimensions?: {
+            width: number;
+            height: number;
+            aspectRatio: number;
+          };
+        };
+      };
   hotspot?: { x: number; y: number; height: number; width: number };
   crop?: { top: number; bottom: number; left: number; right: number };
 };
