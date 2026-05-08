@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { QuotedField } from "../pricing/QuotedField";
 
 export const project = defineType({
   name: "project",
@@ -45,6 +46,7 @@ export const project = defineType({
       name: "quoted",
       title: "Quoted ($)",
       type: "number",
+      components: { field: QuotedField },
     }),
     defineField({
       name: "billed",

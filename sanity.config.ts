@@ -1,10 +1,11 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
-import { DashboardIcon } from "@sanity/icons";
+import { DashboardIcon, TagIcon } from "@sanity/icons";
 import { schemaTypes } from "./sanity/schemas";
 import { structure } from "./sanity/structure";
 import Dashboard from "./sanity/dashboard/Dashboard";
+import Pricing from "./sanity/pricing/Pricing";
 import { apiVersion, dataset, projectId } from "./sanity/env";
 
 export default defineConfig({
@@ -24,6 +25,12 @@ export default defineConfig({
       title: "Dashboard",
       icon: DashboardIcon,
       component: Dashboard,
+    },
+    {
+      name: "pricing",
+      title: "Pricing",
+      icon: TagIcon,
+      component: Pricing,
     },
   ],
 });

@@ -168,15 +168,15 @@ export default function Dashboard() {
 
   return (
     <Container width={4} padding={4}>
-      <Stack space={5}>
-        <Stack space={2}>
+      <Stack gap={5}>
+        <Stack gap={2}>
           <Heading size={3}>Dashboard</Heading>
           <Text size={1} muted>
             Snapshot of the pipeline, money, and recent activity.
           </Text>
         </Stack>
 
-        <Grid columns={[1, 2, 4]} gap={3}>
+        <Grid gridTemplateColumns={[1, 2, 4]} gap={3}>
           <Stat
             label="Open leads"
             value={String(data.openLeads)}
@@ -201,7 +201,7 @@ export default function Dashboard() {
           />
         </Grid>
 
-        <Grid columns={[1, 1, 3]} gap={3}>
+        <Grid gridTemplateColumns={[1, 1, 3]} gap={3}>
           <Stat
             label="Outstanding AR"
             value={fmtMoney(outstandingTotal)}
@@ -225,9 +225,9 @@ export default function Dashboard() {
           />
         </Grid>
 
-        <Grid columns={[1, 1, 2]} gap={3}>
+        <Grid gridTemplateColumns={[1, 1, 2]} gap={3}>
           <Card padding={4} radius={3} shadow={1}>
-            <Stack space={3}>
+            <Stack gap={3}>
               <Flex align="center" justify="space-between">
                 <Heading size={1}>Recent leads</Heading>
                 <button
@@ -243,7 +243,7 @@ export default function Dashboard() {
                   No leads yet.
                 </Text>
               ) : (
-                <Stack space={2}>
+                <Stack gap={2}>
                   {data.recentLeads.map((lead) => (
                     <Row
                       key={lead._id}
@@ -258,7 +258,7 @@ export default function Dashboard() {
           </Card>
 
           <Card padding={4} radius={3} shadow={1}>
-            <Stack space={3}>
+            <Stack gap={3}>
               <Flex align="center" justify="space-between">
                 <Heading size={1}>Recent invoices</Heading>
                 <button
@@ -274,7 +274,7 @@ export default function Dashboard() {
                   No invoices yet.
                 </Text>
               ) : (
-                <Stack space={2}>
+                <Stack gap={2}>
                   {data.recentInvoices.map((inv) => (
                     <Row
                       key={inv._id}
@@ -316,7 +316,7 @@ function Stat({
 }) {
   return (
     <Card padding={4} radius={3} shadow={1} tone={tone}>
-      <Stack space={3}>
+      <Stack gap={3}>
         <Text size={1} muted weight="medium">
           {label}
         </Text>
@@ -343,7 +343,7 @@ function Row({
   return (
     <Flex align="center" justify="space-between" gap={3}>
       <Box flex={1} style={{ minWidth: 0 }}>
-        <Stack space={1}>
+        <Stack gap={1}>
           <Text size={1} weight="medium" textOverflow="ellipsis">
             {title}
           </Text>
