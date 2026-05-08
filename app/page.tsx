@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const CALENDLY_URL = "https://calendly.com/vellapps/30min";
 const EMAIL = "vince@vellapps.com";
@@ -525,6 +526,14 @@ export default function Home() {
             </p>
           </div>
           <ul className="flex items-center gap-6 text-text-muted">
+            <li>
+              <Link
+                href="/privacy"
+                className="hover:text-brand transition-colors"
+              >
+                Privacy
+              </Link>
+            </li>
             <li>
               <a
                 href={GITHUB_URL}
