@@ -163,6 +163,68 @@ export const structure: StructureResolver = (S) =>
         ),
 
       S.listItem()
+        .title("⭐ Testimonials")
+        .child(
+          S.list()
+            .title("Testimonials")
+            .items([
+              S.listItem()
+                .title("Pending review")
+                .child(
+                  S.documentList()
+                    .title("Pending review")
+                    .schemaType("testimonial")
+                    .apiVersion(apiVersion)
+                    .filter(`_type == "testimonial" && status == "pending"`)
+                    .defaultOrdering([
+                      { field: "submittedAt", direction: "desc" },
+                    ])
+                ),
+              S.listItem()
+                .title("Approved")
+                .child(
+                  S.documentList()
+                    .title("Approved")
+                    .schemaType("testimonial")
+                    .apiVersion(apiVersion)
+                    .filter(`_type == "testimonial" && status == "approved"`)
+                    .defaultOrdering([
+                      { field: "approvedAt", direction: "desc" },
+                    ])
+                ),
+              S.listItem()
+                .title("Featured")
+                .child(
+                  S.documentList()
+                    .title("Featured")
+                    .schemaType("testimonial")
+                    .apiVersion(apiVersion)
+                    .filter(
+                      `_type == "testimonial" && status == "approved" && featured == true`
+                    )
+                ),
+              S.listItem()
+                .title("Rejected")
+                .child(
+                  S.documentList()
+                    .title("Rejected")
+                    .schemaType("testimonial")
+                    .apiVersion(apiVersion)
+                    .filter(`_type == "testimonial" && status == "rejected"`)
+                ),
+              S.listItem()
+                .title("Archived")
+                .child(
+                  S.documentList()
+                    .title("Archived")
+                    .schemaType("testimonial")
+                    .apiVersion(apiVersion)
+                    .filter(`_type == "testimonial" && status == "archived"`)
+                ),
+            ])
+        ),
+
+      S.listItem()
         .title("📝 Reviews")
         .child(
           S.documentList()
@@ -182,4 +244,5 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem("invoice").title("All invoices"),
       S.documentTypeListItem("timeEntry").title("All time entries"),
       S.documentTypeListItem("review").title("All reviews"),
+      S.documentTypeListItem("testimonial").title("All testimonials"),
     ]);

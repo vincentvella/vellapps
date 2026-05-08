@@ -5,6 +5,7 @@ import { lead } from "./lead";
 import { invoice } from "./invoice";
 import { timeEntry } from "./timeEntry";
 import { review } from "./review";
+import { testimonial } from "./testimonial";
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   client,
@@ -13,4 +14,5 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   invoice,
   timeEntry,
   review,
+  testimonial,
 ];

@@ -6,6 +6,11 @@ import { schemaTypes } from "./sanity/schemas";
 import { structure } from "./sanity/structure";
 import Dashboard from "./sanity/dashboard/Dashboard";
 import Pricing from "./sanity/pricing/Pricing";
+import {
+  approveTestimonial,
+  rejectTestimonial,
+  archiveTestimonial,
+} from "./sanity/actions/testimonialActions";
 import { apiVersion, dataset, projectId } from "./sanity/env";
 
 export default defineConfig({
@@ -15,6 +20,17 @@ export default defineConfig({
   projectId,
   dataset,
   schema: { types: schemaTypes },
+  document: {
+    actions: (prev, context) => {
+      if (context.schemaType !== "testimonial") return prev;
+      return [
+        approveTestimonial,
+        rejectTestimonial,
+        archiveTestimonial,
+        ...prev,
+      ];
+    },
+  },
   plugins: [
     structureTool({ structure }),
     visionTool({ defaultApiVersion: apiVersion }),
