@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { WebVitalsReporter } from "./components/WebVitalsReporter";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -63,8 +64,15 @@ export default function RootLayout({
     >
       <head>
         <meta name="darkreader-lock" />
+        <script
+          defer
+          src="/_/u.js"
+          data-website-id="7ebd4549-885e-4c27-82c4-b3ba906b34bb"
+          data-host-url="/_/u"
+        ></script>
       </head>
       <body className="min-h-full bg-bg text-text" suppressHydrationWarning>
+        <WebVitalsReporter />
         {children}
       </body>
     </html>
