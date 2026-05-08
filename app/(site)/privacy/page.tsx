@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-const LAST_UPDATED = "May 7, 2026";
+const LAST_UPDATED = "May 8, 2026";
 const EMAIL = "vince@vellapps.com";
 
 export const metadata: Metadata = {
@@ -92,6 +92,12 @@ export default function PrivacyPage() {
               does not fingerprint you, and does not share data with any third
               party.
             </p>
+            <p className="mt-4">
+              The site also reports anonymous Core Web Vitals (page-load and
+              interaction timings — LCP, CLS, INP, FCP, TTFB) to the same
+              Umami instance as custom events so I can keep the site fast. No
+              personal data is attached to those events.
+            </p>
           </section>
 
           <section>
@@ -115,6 +121,40 @@ export default function PrivacyPage() {
               If you email me, I read it, save it, and may reply. That&apos;s
               it. I don&apos;t add you to a mailing list — there isn&apos;t
               one.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl sm:text-2xl font-semibold text-text tracking-tight mb-3">
+              Records I keep about leads &amp; clients
+            </h2>
+            <p>
+              If you reach out about a project or hire me, I keep a private
+              record so I can quote, do the work, and invoice. That record
+              lives in a content store hosted by{" "}
+              <a
+                href="https://www.sanity.io"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand underline decoration-brand/40 underline-offset-4 hover:decoration-brand"
+              >
+                Sanity
+              </a>{" "}
+              and is only accessible to me. Depending on the stage of our
+              conversation it may include: your name, contact email or phone,
+              what you&apos;re trying to build, anything you&apos;ve mentioned
+              about budget, the project scope and status, time logged against
+              the project, and invoice details (amount, dates, status). It
+              does not include payment card information — invoicing happens
+              outside this system.
+            </p>
+            <p className="mt-4">
+              These records exist purely for running the engagement and the
+              business records around it. They are not used for marketing,
+              not shared with third parties, and not joined with the
+              analytics data above. If you&apos;d like a copy of what I have
+              about you, or want it deleted (subject to whatever I&apos;m
+              required to retain for tax purposes), email me.
             </p>
           </section>
 
