@@ -163,6 +163,75 @@ export const structure: StructureResolver = (S) =>
         ),
 
       S.listItem()
+        .title("🌐 Site content")
+        .child(
+          S.list()
+            .title("Site content")
+            .items([
+              S.listItem()
+                .title("Services")
+                .child(
+                  S.documentList()
+                    .title("Services")
+                    .schemaType("service")
+                    .apiVersion(apiVersion)
+                    .filter(`_type == "service"`)
+                    .defaultOrdering([
+                      { field: "order", direction: "asc" },
+                    ])
+                ),
+              S.listItem()
+                .title("Work")
+                .child(
+                  S.documentList()
+                    .title("Work")
+                    .schemaType("workItem")
+                    .apiVersion(apiVersion)
+                    .filter(`_type == "workItem"`)
+                    .defaultOrdering([
+                      { field: "order", direction: "asc" },
+                    ])
+                ),
+              S.listItem()
+                .title("Process steps")
+                .child(
+                  S.documentList()
+                    .title("Process steps")
+                    .schemaType("processStep")
+                    .apiVersion(apiVersion)
+                    .filter(`_type == "processStep"`)
+                    .defaultOrdering([
+                      { field: "order", direction: "asc" },
+                    ])
+                ),
+              S.listItem()
+                .title("FAQs")
+                .child(
+                  S.documentList()
+                    .title("FAQs")
+                    .schemaType("faq")
+                    .apiVersion(apiVersion)
+                    .filter(`_type == "faq"`)
+                    .defaultOrdering([
+                      { field: "order", direction: "asc" },
+                    ])
+                ),
+              S.listItem()
+                .title("Stack")
+                .child(
+                  S.documentList()
+                    .title("Stack")
+                    .schemaType("stackTool")
+                    .apiVersion(apiVersion)
+                    .filter(`_type == "stackTool"`)
+                    .defaultOrdering([
+                      { field: "order", direction: "asc" },
+                    ])
+                ),
+            ])
+        ),
+
+      S.listItem()
         .title("⭐ Testimonials")
         .child(
           S.list()

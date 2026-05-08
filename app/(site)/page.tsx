@@ -1,72 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
+import { sanityClient } from "@/sanity/lib/client";
+import { urlForImage } from "@/sanity/lib/imageUrl";
+import { HOMEPAGE_QUERY, type HomepageContent } from "./queries";
 
 const CALENDLY_URL = "https://calendly.com/vellapps/30min";
 const EMAIL = "vince@vellapps.com";
 const GITHUB_URL = "https://github.com/vincentvella";
 const LINKEDIN_URL = "https://www.linkedin.com/in/vincent-vella";
 
-const services = [
-  {
-    title: "Build something new",
-    summary: "Websites, apps, or both.",
-    body: "You have an idea and you want it built — a real website, a real iPhone or Android app, sometimes all three. I do the whole job: design, build, polish, launch. Usually from one shared system so everything stays in sync as you grow.",
-  },
-  {
-    title: "Refresh what's there",
-    summary: "Modernize an existing site or app.",
-    body: "A site that's looking tired, doesn't work right on phones, or doesn't represent where your business is now. I'll bring it up to date — visually, technically, on mobile — without throwing out the parts that already work.",
-  },
-  {
-    title: "Take over from someone else",
-    summary: "When your last developer fell through.",
-    body: "Last-minute hosting transfers, half-finished projects, work the previous developer abandoned or stopped responding to. I move quickly, get things back on solid ground, and stick around to keep them running.",
-  },
-  {
-    title: "The small stuff that's been waiting",
-    summary: "Quick updates the big firms won't touch.",
-    body: "A Google listing that's been stuck in your agency's queue for months. A form that stopped working. A page that needs new photos and copy. Small things that have been sitting too long — I just take care of them.",
-  },
-];
-
-const work = [
-  {
-    title: "Caliburr",
-    tagline: "An app for dialing in your coffee",
-    href: "https://caliburr.coffee",
-    image: "/caliburr.png",
-    body:
-      "Helps espresso drinkers find the right grind setting for their gear. Anyone can add a grinder or machine, but it stays editable until five other people confirm the details — then it locks in as the canonical reference. The app then averages everyone's recipes so getting started on a new setup feels like guidance from a friend, not guesswork. Same app on iPhone, Android, and the web.",
-    stack: ["Expo", "React Native", "Supabase", "Postgres", "RevenueCat", "TypeScript"],
-  },
-  {
-    title: "Stash Note",
-    tagline: "Notes that work everywhere",
-    href: null,
-    image: "/stash-note.png",
-    body:
-      "A note-taking app with rich formatting, link previews, embedded images, and drawings you can edit inline. Same notes on your phone, tablet, and computer. Stores everything on the device first, so typing never waits on the internet — sync happens quietly in the background.",
-    stack: ["Expo", "Lexical", "LegendState", "Supabase", "TypeScript"],
-  },
-  {
-    title: "Velk",
-    tagline: "Talk to AI from your terminal",
-    href: "https://github.com/vincentvella/velk",
-    image: null,
-    body:
-      "A small command-line tool for chatting with AI models (Claude, GPT) directly from the terminal. Works with the same plugin tools that Claude Code uses, so it's actually useful for real work, not just chat. Installs in one line.",
-    stack: ["Zig", "Anthropic API", "OpenAI API", "MCP"],
-  },
-  {
-    title: "Togglez",
-    tagline: "Turn software features on and off safely",
-    href: null,
-    image: null,
-    body:
-      "A self-hosted way for software teams to switch features on and off without having to redeploy — useful for testing new things with a small group of users before everyone gets them. Most teams pay a vendor for this; Togglez is the free alternative if you'd rather keep your data on your own servers.",
-    stack: ["Go", "Postgres", "Keycloak", "Docker"],
-  },
-];
+export const revalidate = 60;
 
 const positions = [
   {
@@ -95,88 +38,10 @@ const positions = [
   },
 ];
 
-const process = [
-  {
-    title: "Intro call",
-    body: "30 minutes, free. Tell me what you want to make and I'll tell you honestly whether I'm the right person to help.",
-  },
-  {
-    title: "Quote in writing",
-    body: "Before I touch anything, you get a clear scope and price. No surprise bills, no scope creep without a conversation first.",
-  },
-  {
-    title: "Build, with updates",
-    body: "Weekly progress notes while I'm building. You'll always know where things stand. Easy to reach by email, text, or call.",
-  },
-  {
-    title: "Launch and stick around",
-    body: "I don't disappear once it's live. Fixes, small updates, hosting questions — I'm still here when you need me.",
-  },
-];
+export default async function Home() {
+  const { services, work, process, faqs, stack } =
+    await sanityClient.fetch<HomepageContent>(HOMEPAGE_QUERY);
 
-const faqs = [
-  {
-    question: "How quickly can you start?",
-    answer:
-      "Usually within a week or two for small things; bigger projects we'll line up on the call. If something's actively broken — site down, can't reach your old developer — I'll move you up the queue.",
-  },
-  {
-    question: "What's the smallest job you'll take?",
-    answer:
-      "No minimum. If it's a 30-minute fix, that's fine. I bill hourly for small things and fixed-price for projects.",
-  },
-  {
-    question: "Can you take over a site someone else built?",
-    answer:
-      "Yes — most often WordPress, but also Shopify, Webflow, Squarespace, and custom-built sites. If you've lost access or the previous developer disappeared, that's something I deal with regularly.",
-  },
-  {
-    question: "Will I be able to update my own content?",
-    answer:
-      "Yes. Every site I build comes with a content management system, so you can change copy, swap photos, add pages, and update your hours without calling me. I'd rather you be able to do the small stuff yourself — I'm here for the things that actually need a developer.",
-  },
-  {
-    question: "What about hosting and ongoing costs?",
-    answer:
-      "Hosting, the CMS, and the critical security patches that keep your site safe are baked into the project price. No mandatory monthly bill from me, no surprise fees — most months, there's nothing to do. If you'd rather keep your current hosting and just give me access to manage things, that works too.",
-  },
-  {
-    question: "Do you offer ongoing care or analytics?",
-    answer:
-      "Yes, optionally. If you want a privacy-friendly analytics dashboard, uptime monitoring, automated backups, a monthly health summary, and priority response when something breaks — I offer a Care plan at $100/month. It's opt-in. Most clients don't need it, some find the peace of mind worth it. You can add it any time and cancel any time.",
-  },
-  {
-    question: "How do you bill?",
-    answer:
-      "Small fixes are billed hourly for the actual work — emails, calls, and questions don't count. Projects are fixed-price after we scope them together. You'll always see the price in writing before I start, and I don't bill for anything that wasn't agreed.",
-  },
-  {
-    question: "Will I actually be able to reach you?",
-    answer:
-      "Yes. Email or text — whichever works better for you. I'm not the kind of person who goes silent for two weeks. Weekly progress notes during a build, and I respond to messages within a day on weekdays.",
-  },
-];
-
-const stack = [
-  "TypeScript",
-  "React",
-  "Next.js",
-  "React Native",
-  "Expo",
-  "GraphQL",
-  "GraphQL Federation",
-  "Node.js",
-  "Postgres",
-  "Supabase",
-  "AWS",
-  "Kubernetes",
-  "Terraform",
-  "GitHub Actions",
-  "Go",
-  "Zig",
-];
-
-export default function Home() {
   return (
     <main className="relative">
       {/* HERO */}
@@ -261,7 +126,7 @@ export default function Home() {
           <ul className="grid gap-4 sm:grid-cols-2">
             {services.map((s) => (
               <li
-                key={s.title}
+                key={s._id}
                 className="rounded-xl border border-border bg-bg-card p-6 hover:border-border-strong transition-colors"
               >
                 <h3 className="text-lg font-semibold text-text">{s.title}</h3>
@@ -290,22 +155,25 @@ export default function Home() {
 
           <ul className="grid gap-5 sm:grid-cols-2">
             {work.map((p) => {
+              const imageUrl = p.image
+                ? urlForImage(p.image).width(1280).height(800).fit("crop").url()
+                : null;
               const Wrapper = p.href ? "a" : "div";
               const wrapperProps = p.href
                 ? { href: p.href, target: "_blank", rel: "noopener noreferrer" }
                 : {};
               return (
-                <li key={p.title}>
+                <li key={p._id}>
                   <Wrapper
                     {...wrapperProps}
                     className={`group block h-full rounded-xl border border-border bg-bg-card overflow-hidden transition-colors ${
                       p.href ? "hover:border-brand" : "hover:border-border-strong"
                     }`}
                   >
-                    {p.image ? (
+                    {imageUrl ? (
                       <div className="relative aspect-[16/10] bg-bg overflow-hidden border-b border-border">
                         <Image
-                          src={p.image}
+                          src={imageUrl}
                           alt={`${p.title} — ${p.tagline}`}
                           fill
                           sizes="(min-width: 640px) 50vw, 100vw"
@@ -397,10 +265,10 @@ export default function Home() {
             <ul className="flex flex-wrap gap-2">
               {stack.map((tech) => (
                 <li
-                  key={tech}
+                  key={tech._id}
                   className="font-mono text-xs text-text-muted border border-border rounded-md px-2.5 py-1.5 bg-bg-card"
                 >
-                  {tech}
+                  {tech.name}
                 </li>
               ))}
             </ul>
@@ -426,7 +294,7 @@ export default function Home() {
           <ol className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {process.map((step, i) => (
               <li
-                key={step.title}
+                key={step._id}
                 className="rounded-xl border border-border bg-bg-card p-6"
               >
                 <div className="flex items-center gap-3">
@@ -463,7 +331,7 @@ export default function Home() {
 
           <ul className="border-t border-border">
             {faqs.map((q) => (
-              <li key={q.question}>
+              <li key={q._id}>
                 <details className="group border-b border-border">
                   <summary className="flex items-center justify-between gap-4 cursor-pointer py-5 list-none [&::-webkit-details-marker]:hidden">
                     <span className="font-medium text-text text-base sm:text-lg">
