@@ -18,9 +18,23 @@ export const metadata: Metadata = {
   },
 };
 
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://vellapps.com" },
+    { "@type": "ListItem", position: 2, name: "Privacy", item: "https://vellapps.com/privacy" },
+  ],
+};
+
 export default function PrivacyPage() {
   return (
     <main id="main" className="relative">
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
       <section className="border-b border-border">
         <div className="mx-auto max-w-3xl px-6 pt-10 pb-16 sm:pt-14 sm:pb-20">
           <header className="flex items-center justify-between">

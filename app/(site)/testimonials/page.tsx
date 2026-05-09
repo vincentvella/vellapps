@@ -18,12 +18,14 @@ const QUERY = `*[_type == "testimonial" && status == "approved"] | order(feature
 }`;
 
 export const metadata: Metadata = {
-  title: "Testimonials",
-  description: "Kind words from people I've built things with.",
+  title: "Client Testimonials",
+  description:
+    "Kind words from people I've built things with — small business owners, founders, and folks who needed a real developer.",
   alternates: { canonical: "/testimonials" },
   openGraph: {
-    title: "Testimonials · Vellapps",
-    description: "Kind words from people I've built things with.",
+    title: "Client Testimonials · Vellapps",
+    description:
+      "Kind words from people I've built things with — small business owners, founders, and folks who needed a real developer.",
     url: "/testimonials",
     type: "article",
   },
@@ -34,8 +36,56 @@ export const revalidate = 60;
 export default async function TestimonialsPage() {
   const testimonials = await sanityClient.fetch<ApprovedTestimonial[]>(QUERY);
 
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://vellapps.com",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Testimonials",
+        item: "https://vellapps.com/testimonials",
+      },
+    ],
+  };
+
+  const reviewLds = testimonials.map((t) => ({
+    "@context": "https://schema.org",
+    "@type": "Review",
+    reviewBody: t.body,
+    author: {
+      "@type": "Person",
+      name: [t.role, t.company].filter(Boolean).join(", ") || t.name,
+    },
+    itemReviewed: {
+      "@type": "ProfessionalService",
+      "@id": "https://vellapps.com/#vellapps",
+      name: "Vellapps LLC",
+    },
+    ...(t.approvedAt ? { datePublished: t.approvedAt } : {}),
+  }));
+
   return (
     <main id="main" className="relative">
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
+      {reviewLds.map((ld, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
+        />
+      ))}
       <section className="border-b border-border">
         <div className="mx-auto max-w-3xl px-6 pt-10 pb-16 sm:pt-14 sm:pb-20">
           <header className="flex items-center justify-between">

@@ -42,31 +42,77 @@ export default async function Home() {
   const { services, work, process, faqs, stack } =
     await sanityClient.fetch<HomepageContent>(HOMEPAGE_QUERY);
 
+  const websiteLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    url: "https://vellapps.com",
+    name: "Vellapps",
+    description:
+      "Custom web and mobile app development by Vince Vella.",
+    inLanguage: "en-US",
+    publisher: {
+      "@type": "Organization",
+      name: "Vellapps LLC",
+      url: "https://vellapps.com",
+      logo: "https://vellapps.com/icon",
+    },
+  };
+
   const personLd = {
     "@context": "https://schema.org",
     "@type": "Person",
+    "@id": "https://vellapps.com/#vince",
     name: "Vincent Vella",
+    givenName: "Vincent",
+    familyName: "Vella",
+    alternateName: "Vince Vella",
     url: "https://vellapps.com",
-    sameAs: [GITHUB_URL, LINKEDIN_URL],
+    image: "https://vellapps.com/opengraph-image",
+    sameAs: [
+      GITHUB_URL,
+      LINKEDIN_URL,
+      "https://www.vincevella.com",
+    ],
     jobTitle: "Software Engineer",
     email: `mailto:${EMAIL}`,
     knowsAbout: stack.map((t) => t.name),
+    knowsLanguage: "en-US",
+    worksFor: { "@id": "https://vellapps.com/#vellapps" },
   };
 
   const businessLd = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
+    "@id": "https://vellapps.com/#vellapps",
     name: "Vellapps LLC",
+    legalName: "Vellapps LLC",
     url: "https://vellapps.com",
+    logo: "https://vellapps.com/icon",
     image: "https://vellapps.com/opengraph-image",
     description:
-      "Vince Vella's side outfit. Custom web and mobile apps for a handful of folks at a time.",
-    founder: { "@type": "Person", name: "Vincent Vella" },
+      "Custom websites, iPhone and Android apps, redesigns, take-overs from previous developers, and small fixes. Built by Vince Vella.",
+    slogan: "Apps, made on the side.",
+    founder: { "@id": "https://vellapps.com/#vince" },
     email: `mailto:${EMAIL}`,
     sameAs: [GITHUB_URL, LINKEDIN_URL],
-    serviceType: services.map((s) => s.title),
-    areaServed: "US",
+    areaServed: { "@type": "Country", name: "United States" },
     priceRange: "$$",
+    serviceType: services.map((s) => s.title),
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Services",
+      itemListElement: services.map((s, i) => ({
+        "@type": "Offer",
+        position: i + 1,
+        itemOffered: {
+          "@type": "Service",
+          name: s.title,
+          description: s.body,
+          provider: { "@id": "https://vellapps.com/#vellapps" },
+        },
+      })),
+    },
+    knowsAbout: stack.map((t) => t.name),
   };
 
   const faqLd = {
@@ -84,6 +130,11 @@ export default async function Home() {
 
   return (
     <main id="main" className="relative">
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteLd) }}
+      />
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
@@ -141,7 +192,7 @@ export default async function Home() {
               Apps,{" "}
               <span className="text-brand">made on the side.</span>
             </h1>
-            <p className="mt-6 text-lg sm:text-xl text-text-muted leading-relaxed text-balance">
+            <p className="mt-6 text-lg sm:text-xl text-text-muted leading-relaxed">
               Vellapps is my side gig. I help a handful of folks build the apps they actually want — websites, mobile apps, or both. Real custom work, written by me, usually in the evenings.
             </p>
             <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
@@ -509,7 +560,7 @@ export default async function Home() {
               <a
                 href={GITHUB_URL}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="me noopener noreferrer"
                 className="hover:text-brand transition-colors"
               >
                 GitHub
@@ -520,7 +571,7 @@ export default async function Home() {
               <a
                 href={LINKEDIN_URL}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="me noopener noreferrer"
                 className="hover:text-brand transition-colors"
               >
                 LinkedIn

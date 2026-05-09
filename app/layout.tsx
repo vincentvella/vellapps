@@ -5,49 +5,82 @@ import "./globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800", "900"],
+  preload: true,
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500"],
+  preload: false,
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://vellapps.com"),
   title: {
-    default: "Vellapps — Apps, made on the side.",
+    default: "Vellapps — Custom Web & Mobile App Development by Vince Vella",
     template: "%s · Vellapps",
   },
   description:
-    "Vellapps is Vince Vella's side outfit. Custom web and mobile apps for a handful of folks at a time. React, React Native, Next.js, Expo — built by hand.",
+    "Custom websites and iPhone / Android apps, built by hand by Vince Vella. Site rescues, redesigns, take-overs from previous developers, and small fixes. Free 30-minute intro call, fixed-price quotes, no retainers.",
   applicationName: "Vellapps",
-  authors: [{ name: "Vincent Vella" }],
+  authors: [{ name: "Vincent Vella", url: "https://www.vincevella.com" }],
+  creator: "Vincent Vella",
+  publisher: "Vellapps LLC",
+  category: "technology",
   keywords: [
-    "freelance software engineer",
-    "React Native consultant",
+    "freelance web developer",
+    "freelance app developer",
+    "custom website development",
+    "React Native developer",
     "Next.js developer",
     "Expo developer",
+    "iPhone app developer",
+    "Android app developer",
+    "mobile app development",
+    "WordPress migration",
+    "site rescue",
+    "small business website",
     "fractional engineer",
     "MVP development",
-    "technical advisor",
-    "cross-platform mobile",
+    "Vince Vella",
+    "Vellapps",
   ],
   openGraph: {
-    title: "Vellapps — Apps, made on the side.",
+    title: "Vellapps — Custom Web & Mobile App Development",
     description:
-      "Vince Vella's side outfit. Custom web and mobile apps, built by hand for a handful of folks at a time.",
+      "Custom websites, iPhone and Android apps, redesigns, and rescue work — built by Vince Vella. Free 30-minute intro call, fixed-price quotes, no retainers.",
     url: "https://vellapps.com",
     siteName: "Vellapps",
     type: "website",
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vellapps — Apps, made on the side.",
+    title: "Vellapps — Custom Web & Mobile App Development",
     description:
-      "Vince Vella's side outfit. Custom web and mobile apps, built by hand.",
+      "Custom websites, iPhone and Android apps, and rescue work for folks who need a real developer.",
     creator: "@vellapps",
+    site: "@vellapps",
   },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  alternates: {
+    canonical: "https://vellapps.com",
+    types: { "application/json+ld": "https://vellapps.com" },
+  },
 };
 
 export default function RootLayout({
