@@ -2,7 +2,7 @@ export const HOMEPAGE_QUERY = `{
   "services": *[_type == "service" && visible != false] | order(order asc, _createdAt asc) {
     _id, title, summary, body
   },
-  "work": *[_type == "workItem" && visible != false] | order(order asc, _createdAt asc) {
+  "work": *[_type == "workItem" && visible != false && coalesce(order, 0) >= 0] | order(order asc, _createdAt asc) {
     _id, title, tagline, href, body, stack,
     image{ ..., asset->{ _id, metadata { dimensions { width, height, aspectRatio } } } }
   },

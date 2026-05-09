@@ -149,7 +149,7 @@ export default async function Home() {
               A few things I&apos;ve built
             </h2>
             <p className="mt-3 text-text-muted max-w-2xl text-balance">
-              A handful of side projects. Caliburr is live; the rest are in various states of done. Happy to walk through any of them.
+              A mix of client work and side projects. Most are live; a couple are still in progress. Happy to walk through any of them.
             </p>
           </div>
 
