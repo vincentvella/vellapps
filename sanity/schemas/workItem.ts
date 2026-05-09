@@ -36,6 +36,13 @@ export const workItem = defineType({
       options: { hotspot: true },
     }),
     defineField({
+      name: "alt",
+      title: "Image alt text",
+      type: "string",
+      description:
+        "Optional. Describes the image for screen readers. Falls back to '<title> — <tagline>' when blank.",
+    }),
+    defineField({
       name: "body",
       type: "text",
       rows: 5,

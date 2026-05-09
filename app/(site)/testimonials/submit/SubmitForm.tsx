@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { useActionState } from "react";
 import { attribution, displayName } from "../format";
@@ -22,17 +22,27 @@ function BodyCounter({ length }: { length: number }) {
       ? "text-amber-400"
       : "text-brand";
 
-  const label = belowMin
+  const visibleLabel = belowMin
     ? `${length} / ${BODY_MIN} chars`
     : `${length} / ${BODY_MAX} chars`;
 
+  // A separate, more verbose phrasing for screen readers — the visible
+  // version is terse to keep the field header tidy.
+  const srLabel = belowMin
+    ? `${length} of ${BODY_MIN} characters minimum`
+    : nearMax
+      ? `${length} of ${BODY_MAX} characters used, approaching limit`
+      : `${length} of ${BODY_MAX} characters used`;
+
   return (
-    <span
-      className={`text-xs font-mono tabular-nums ${tone}`}
-      aria-live="polite"
-    >
-      {!belowMin ? <span aria-hidden="true">✓ </span> : null}
-      {label}
+    <span className={`text-xs font-mono tabular-nums ${tone}`}>
+      <span aria-hidden="true">
+        {!belowMin ? "✓ " : ""}
+        {visibleLabel}
+      </span>
+      <span className="sr-only" aria-live="polite">
+        {srLabel}
+      </span>
     </span>
   );
 }
@@ -58,14 +68,28 @@ export function SubmitForm() {
   const [role, setRole] = useState("");
   const [company, setCompany] = useState("");
   const [body, setBody] = useState("");
+  const successRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setRenderedAt(Date.now());
   }, []);
 
+  // When the form succeeds, move keyboard focus to the success message so
+  // screen readers announce it and Tab continues from the right place.
+  useEffect(() => {
+    if (state.status === "success") {
+      successRef.current?.focus();
+    }
+  }, [state.status]);
+
   if (state.status === "success") {
     return (
-      <div className="rounded-xl border border-brand/30 bg-brand/5 p-6">
+      <div
+        ref={successRef}
+        role="status"
+        tabIndex={-1}
+        className="rounded-xl border border-brand/30 bg-brand/5 p-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand/60"
+      >
         <h2 className="text-xl font-semibold text-text mb-2">
           Thanks — really appreciate this!
         </h2>
@@ -80,8 +104,10 @@ export function SubmitForm() {
   const showPreview =
     name.trim().length > 0 || body.trim().length > 0 || company.trim().length > 0;
 
+  const bodyHasError = state.status === "error";
+
   return (
-    <form action={formAction} className="space-y-5">
+    <form action={formAction} className="space-y-5" noValidate={false}>
       <input type="hidden" name="rendered_at" value={renderedAt} />
       <div
         aria-hidden="true"
@@ -120,6 +146,9 @@ export function SubmitForm() {
           type="text"
           required
           maxLength={120}
+          autoComplete="name"
+          aria-required="true"
+          aria-describedby="name-hint"
           value={name}
           onChange={(e) => setName(e.target.value)}
           className={inputClasses}
@@ -133,6 +162,7 @@ export function SubmitForm() {
             name="role"
             type="text"
             placeholder="e.g. Founder"
+            autoComplete="organization-title"
             value={role}
             onChange={(e) => setRole(e.target.value)}
             className={inputClasses}
@@ -145,6 +175,8 @@ export function SubmitForm() {
             type="text"
             required
             maxLength={160}
+            autoComplete="organization"
+            aria-required="true"
             value={company}
             onChange={(e) => setCompany(e.target.value)}
             className={inputClasses}
@@ -162,6 +194,7 @@ export function SubmitForm() {
           name="email"
           type="email"
           autoComplete="email"
+          aria-describedby="email-hint"
           className={inputClasses}
         />
       </Field>
@@ -172,7 +205,9 @@ export function SubmitForm() {
             htmlFor="body"
             className="block text-sm font-medium text-text"
           >
-            Your testimonial<span className="text-brand"> *</span>
+            Your testimonial
+            <span aria-hidden="true" className="text-brand"> *</span>
+            <span className="sr-only"> (required)</span>
           </label>
           <BodyCounter length={body.length} />
         </div>
@@ -183,11 +218,14 @@ export function SubmitForm() {
           minLength={BODY_MIN}
           maxLength={BODY_MAX}
           rows={6}
+          aria-required="true"
+          aria-describedby="body-hint"
+          aria-invalid={bodyHasError && body.length < BODY_MIN}
           value={body}
           onChange={(e) => setBody(e.target.value)}
           className={`${inputClasses} resize-y`}
         />
-        <p className="text-xs text-text-faint">
+        <p id="body-hint" className="text-xs text-text-faint">
           Plain language works best. What were we trying to do? How did it
           go? What stuck with you?
         </p>
@@ -198,6 +236,7 @@ export function SubmitForm() {
           type="checkbox"
           name="consent"
           required
+          aria-required="true"
           className="mt-1 h-4 w-4 rounded border-border accent-[var(--color-brand)]"
         />
         <span>
@@ -206,15 +245,23 @@ export function SubmitForm() {
         </span>
       </label>
 
-      {state.status === "error" ? (
-        <p className="text-sm text-red-400">{state.message}</p>
-      ) : null}
+      <div role="alert" aria-live="polite" className="min-h-0">
+        {state.status === "error" ? (
+          <p className="text-sm text-red-400">{state.message}</p>
+        ) : null}
+      </div>
 
       {showPreview ? (
-        <div className="space-y-3 pt-2">
-          <p className="font-mono text-xs uppercase tracking-[0.22em] text-text-faint">
+        <section
+          aria-labelledby="preview-heading"
+          className="space-y-3 pt-2"
+        >
+          <h2
+            id="preview-heading"
+            className="font-mono text-xs uppercase tracking-[0.22em] text-text-faint"
+          >
             Public preview
-          </p>
+          </h2>
           <div className="rounded-2xl border border-border bg-bg p-6">
             <blockquote className="text-base sm:text-lg leading-relaxed text-text text-balance">
               {body.trim() ? (
@@ -239,7 +286,7 @@ export function SubmitForm() {
           <p className="text-xs text-text-faint">
             Your email and full last name are never displayed.
           </p>
-        </div>
+        </section>
       ) : null}
 
       <SubmitButton />
@@ -248,7 +295,7 @@ export function SubmitForm() {
 }
 
 const inputClasses =
-  "block w-full rounded-lg border border-border bg-bg px-4 py-3 text-text placeholder:text-text-faint focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand/60";
+  "block w-full rounded-lg border border-border bg-bg px-4 py-3 text-text placeholder:text-text-faint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:border-brand";
 
 function Field({
   id,
@@ -263,14 +310,24 @@ function Field({
   hint?: string;
   children: React.ReactNode;
 }) {
+  const hintId = hint ? `${id}-hint` : undefined;
   return (
     <div className="space-y-2">
       <label htmlFor={id} className="block text-sm font-medium text-text">
         {label}
-        {required ? <span className="text-brand"> *</span> : null}
+        {required ? (
+          <>
+            <span aria-hidden="true" className="text-brand"> *</span>
+            <span className="sr-only"> (required)</span>
+          </>
+        ) : null}
       </label>
       {children}
-      {hint ? <p className="text-xs text-text-faint">{hint}</p> : null}
+      {hint ? (
+        <p id={hintId} className="text-xs text-text-faint">
+          {hint}
+        </p>
+      ) : null}
     </div>
   );
 }

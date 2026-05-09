@@ -112,7 +112,10 @@ export default async function Home() {
                 Vellapps
               </span>
             </a>
-            <nav className="hidden sm:flex items-center gap-7 text-sm text-text-muted">
+            <nav
+              aria-label="Primary"
+              className="hidden sm:flex items-center gap-7 text-sm text-text-muted"
+            >
               <a href="#services" className="hover:text-text transition-colors">Services</a>
               <a href="#work" className="hover:text-text transition-colors">Work</a>
               <a href="#process" className="hover:text-text transition-colors">Process</a>
@@ -230,7 +233,12 @@ export default async function Home() {
                 : null;
               const Wrapper = p.href ? "a" : "div";
               const wrapperProps = p.href
-                ? { href: p.href, target: "_blank", rel: "noopener noreferrer" }
+                ? {
+                    href: p.href,
+                    target: "_blank",
+                    rel: "noopener noreferrer",
+                    "aria-label": `${p.title} — ${p.tagline} (opens in new tab)`,
+                  }
                 : {};
 
               return (
@@ -253,7 +261,7 @@ export default async function Home() {
                           />
                           <Image
                             src={imageUrl}
-                            alt={`${p.title} — ${p.tagline}`}
+                            alt={p.alt ?? `${p.title} — ${p.tagline}`}
                             fill
                             sizes="(min-width: 640px) 18vw, 36vw"
                             priority={i < 2}
@@ -265,7 +273,7 @@ export default async function Home() {
                       <div className="relative aspect-[16/10] bg-bg overflow-hidden border-b border-border">
                         <Image
                           src={imageUrl}
-                          alt={`${p.title} — ${p.tagline}`}
+                          alt={p.alt ?? `${p.title} — ${p.tagline}`}
                           fill
                           sizes="(min-width: 640px) 50vw, 100vw"
                           priority={i < 2}
@@ -285,7 +293,10 @@ export default async function Home() {
                           {p.title}
                         </h3>
                         {p.href && (
-                          <span className="font-mono text-xs text-brand opacity-0 group-hover:opacity-100 transition-opacity">
+                          <span
+                            aria-hidden="true"
+                            className="font-mono text-xs text-brand opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity"
+                          >
                             visit ↗
                           </span>
                         )}
@@ -502,6 +513,7 @@ export default async function Home() {
                 className="hover:text-brand transition-colors"
               >
                 GitHub
+                <span className="sr-only"> (opens in new tab)</span>
               </a>
             </li>
             <li>
@@ -512,6 +524,7 @@ export default async function Home() {
                 className="hover:text-brand transition-colors"
               >
                 LinkedIn
+                <span className="sr-only"> (opens in new tab)</span>
               </a>
             </li>
             <li>

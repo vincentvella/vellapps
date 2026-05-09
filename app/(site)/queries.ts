@@ -3,7 +3,7 @@ export const HOMEPAGE_QUERY = `{
     _id, title, summary, body
   },
   "work": *[_type == "workItem" && visible != false && coalesce(order, 0) >= 0] | order(order asc, _createdAt asc) {
-    _id, title, tagline, href, body, stack,
+    _id, title, tagline, href, body, stack, alt,
     image{ ..., asset->{ _id, metadata { dimensions { width, height, aspectRatio } } } }
   },
   "process": *[_type == "processStep"] | order(order asc, _createdAt asc) {
@@ -26,6 +26,7 @@ export type HomepageContent = {
     href?: string;
     body: string;
     stack: string[];
+    alt?: string;
     image?: SanityImage;
   }[];
   process: { _id: string; title: string; body: string }[];

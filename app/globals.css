@@ -88,8 +88,10 @@ body {
     animation: none;
     opacity: 1;
   }
-  .wordmark-tile {
+  .wordmark-tile,
+  .wordmark-tile:hover {
     transition: none;
+    transform: none;
   }
 }
 
@@ -111,4 +113,21 @@ body {
   transform: translateY(0);
   outline: 2px solid var(--color-text);
   outline-offset: 2px;
+}
+
+/*
+ * Default browsers focus rings vary; standardize across all interactive
+ * elements that don't already opt-in to a custom :focus-visible style.
+ * Mouse clicks won't trigger this — keyboard nav will.
+ */
+:where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skip-link {
+    transition: none;
+  }
 }
