@@ -96,7 +96,21 @@ export default async function Home() {
     founder: { "@id": "https://vellapps.com/#vince" },
     email: `mailto:${EMAIL}`,
     sameAs: [GITHUB_URL, LINKEDIN_URL],
-    areaServed: { "@type": "Country", name: "United States" },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Newark",
+      addressRegion: "DE",
+      addressCountry: "US",
+    },
+    areaServed: [
+      { "@type": "City", name: "Newark, DE" },
+      { "@type": "City", name: "Wilmington, DE" },
+      { "@type": "City", name: "Oxford, PA" },
+      { "@type": "City", name: "Philadelphia, PA" },
+      { "@type": "AdministrativeArea", name: "Delaware Valley" },
+      { "@type": "AdministrativeArea", name: "Tri-State Area" },
+      { "@type": "Country", name: "United States" },
+    ],
     priceRange: "$$",
     serviceType: services.map((s) => s.title),
     hasOfferCatalog: {
