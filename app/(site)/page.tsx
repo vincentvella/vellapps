@@ -42,8 +42,65 @@ export default async function Home() {
   const { services, work, process, faqs, stack } =
     await sanityClient.fetch<HomepageContent>(HOMEPAGE_QUERY);
 
+  const personLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Vincent Vella",
+    url: "https://vellapps.com",
+    sameAs: [GITHUB_URL, LINKEDIN_URL],
+    jobTitle: "Software Engineer",
+    email: `mailto:${EMAIL}`,
+    knowsAbout: stack.map((t) => t.name),
+  };
+
+  const businessLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    name: "Vellapps LLC",
+    url: "https://vellapps.com",
+    image: "https://vellapps.com/opengraph-image",
+    description:
+      "Vince Vella's side outfit. Custom web and mobile apps for a handful of folks at a time.",
+    founder: { "@type": "Person", name: "Vincent Vella" },
+    email: `mailto:${EMAIL}`,
+    sameAs: [GITHUB_URL, LINKEDIN_URL],
+    serviceType: services.map((s) => s.title),
+    areaServed: "US",
+    priceRange: "$$",
+  };
+
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((q) => ({
+      "@type": "Question",
+      name: q.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: q.answer,
+      },
+    })),
+  };
+
   return (
-    <main className="relative">
+    <main id="main" className="relative">
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }}
+      />
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(businessLd) }}
+      />
+      {faqs.length > 0 && (
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
+        />
+      )}
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-border">
         <div className="absolute inset-0 hero-grid pointer-events-none" aria-hidden />

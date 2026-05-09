@@ -8,7 +8,7 @@
   --color-border-strong: #2a3940;
   --color-text: #e6edf0;
   --color-text-muted: #9aa8af;
-  --color-text-faint: #6b7980;
+  --color-text-faint: #7d8a90;
   --color-brand: #00adb5;
   --color-brand-soft: #18737b;
   --color-brand-glow: #00adb533;
@@ -91,4 +91,24 @@ body {
   .wordmark-tile {
     transition: none;
   }
+}
+
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0.75rem 1rem;
+  background: var(--color-brand);
+  color: var(--color-bg);
+  font-weight: 600;
+  border-bottom-right-radius: 0.5rem;
+  transform: translateY(-110%);
+  transition: transform 160ms ease;
+  z-index: 100;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
 }

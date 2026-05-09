@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function SubmitTestimonialPage() {
   return (
-    <main className="relative">
+    <main id="main" className="relative">
       <section className="border-b border-border">
         <div className="mx-auto max-w-2xl px-6 pt-10 pb-12 sm:pt-14 sm:pb-16">
           <header className="flex items-center justify-between">

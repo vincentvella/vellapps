@@ -35,7 +35,7 @@ export default async function TestimonialsPage() {
   const testimonials = await sanityClient.fetch<ApprovedTestimonial[]>(QUERY);
 
   return (
-    <main className="relative">
+    <main id="main" className="relative">
       <section className="border-b border-border">
         <div className="mx-auto max-w-3xl px-6 pt-10 pb-16 sm:pt-14 sm:pb-20">
           <header className="flex items-center justify-between">

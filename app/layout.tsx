@@ -65,6 +65,9 @@ export default function RootLayout({
         <meta name="darkreader-lock" />
       </head>
       <body className="min-h-full bg-bg text-text" suppressHydrationWarning>
+        <a href="#main" className="skip-link">
+          Skip to main content
+        </a>
         {children}
       </body>
     </html>
