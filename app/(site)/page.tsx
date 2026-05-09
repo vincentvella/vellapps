@@ -3,6 +3,7 @@ import Link from "next/link";
 import { sanityClient } from "@/sanity/lib/client";
 import { urlForImage } from "@/sanity/lib/imageUrl";
 import { HOMEPAGE_QUERY, type HomepageContent } from "./queries";
+import { attribution } from "./testimonials/format";
 
 const CALENDLY_URL = "https://calendly.com/vellapps/30min";
 const EMAIL = "vince@vellapps.com";
@@ -39,7 +40,7 @@ const positions = [
 ];
 
 export default async function Home() {
-  const { services, work, process, faqs, stack } =
+  const { services, work, process, faqs, stack, testimonials } =
     await sanityClient.fetch<HomepageContent>(HOMEPAGE_QUERY);
 
   const websiteLd = {
@@ -171,6 +172,7 @@ export default async function Home() {
               <a href="#work" className="hover:text-text transition-colors">Work</a>
               <a href="#process" className="hover:text-text transition-colors">Process</a>
               <a href="#faq" className="hover:text-text transition-colors">FAQ</a>
+              <a href="/testimonials" className="hover:text-text transition-colors">Testimonials</a>
               <a
                 href={CALENDLY_URL}
                 className="rounded-md border border-border-strong bg-bg-elevated px-3 py-1.5 text-text hover:border-brand hover:text-brand transition-colors"
@@ -375,12 +377,74 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* TESTIMONIALS */}
+      {testimonials.length > 0 && (
+        <section
+          id="testimonials"
+          className="border-b border-border"
+        >
+          <div className="mx-auto max-w-5xl px-6 py-20 sm:py-28">
+            <div className="mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <div>
+                <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand">
+                  03 · In their words
+                </p>
+                <h2 className="mt-3 text-3xl sm:text-4xl font-semibold tracking-tight">
+                  Kind words from folks I&apos;ve built things with
+                </h2>
+              </div>
+              <Link
+                href="/testimonials"
+                className="text-sm text-text-muted hover:text-brand transition-colors"
+              >
+                Read more →
+              </Link>
+            </div>
+
+            {testimonials.length === 1 ? (
+              <div className="mx-auto max-w-2xl">
+                <div className="rounded-xl border border-border bg-bg-card p-6 sm:p-10 text-center">
+                  <blockquote className="text-lg sm:text-xl leading-relaxed text-text text-balance">
+                    &ldquo;{testimonials[0].body}&rdquo;
+                  </blockquote>
+                  <p className="mt-6 text-sm font-mono text-text-muted">
+                    — {attribution(testimonials[0])}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <ul
+                className={`grid gap-5 ${
+                  testimonials.length === 2
+                    ? "sm:grid-cols-2"
+                    : "sm:grid-cols-2 lg:grid-cols-3"
+                }`}
+              >
+                {testimonials.map((t) => (
+                  <li
+                    key={t._id}
+                    className="rounded-xl border border-border bg-bg-card p-6 sm:p-7"
+                  >
+                    <blockquote className="text-text leading-relaxed text-balance">
+                      &ldquo;{t.body}&rdquo;
+                    </blockquote>
+                    <p className="mt-5 text-sm font-mono text-text-muted">
+                      — {attribution(t)}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </section>
+      )}
+
       {/* EXPERIENCE */}
       <section id="experience" className="border-b border-border">
         <div className="mx-auto max-w-5xl px-6 py-20 sm:py-28">
           <div className="mb-12">
             <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand">
-              03 · Day job
+              04 · Day job
             </p>
             <h2 className="mt-3 text-3xl sm:text-4xl font-semibold tracking-tight">
               Where I&apos;ve worked
@@ -435,7 +499,7 @@ export default async function Home() {
         <div className="mx-auto max-w-5xl px-6 py-20 sm:py-28">
           <div className="mb-12">
             <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand">
-              04 · How this goes
+              05 · How this goes
             </p>
             <h2 className="mt-3 text-3xl sm:text-4xl font-semibold tracking-tight">
               What working with me looks like
@@ -473,7 +537,7 @@ export default async function Home() {
         <div className="mx-auto max-w-3xl px-6 py-20 sm:py-28">
           <div className="mb-10">
             <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand">
-              05 · Common questions
+              06 · Common questions
             </p>
             <h2 className="mt-3 text-3xl sm:text-4xl font-semibold tracking-tight">
               Things people usually ask
@@ -513,7 +577,7 @@ export default async function Home() {
         <div className="absolute inset-0 hero-grid pointer-events-none opacity-60" aria-hidden />
         <div className="relative mx-auto max-w-3xl px-6 py-24 sm:py-32 text-center">
           <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand">
-            06 · Say hi
+            07 · Say hi
           </p>
           <h2 className="mt-3 text-3xl sm:text-5xl font-semibold tracking-tight text-balance">
             Got something to build?

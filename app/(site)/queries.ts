@@ -14,6 +14,9 @@ export const HOMEPAGE_QUERY = `{
   },
   "stack": *[_type == "stackTool" && visible != false] | order(order asc, _createdAt asc) {
     _id, name
+  },
+  "testimonials": *[_type == "testimonial" && status == "approved"] | order(featured desc, approvedAt desc, _createdAt desc)[0...3] {
+    _id, name, role, company, body
   }
 }`;
 
@@ -32,6 +35,13 @@ export type HomepageContent = {
   process: { _id: string; title: string; body: string }[];
   faqs: { _id: string; question: string; answer: string }[];
   stack: { _id: string; name: string }[];
+  testimonials: {
+    _id: string;
+    name: string;
+    role?: string;
+    company?: string;
+    body: string;
+  }[];
 };
 
 export type SanityImage = {
