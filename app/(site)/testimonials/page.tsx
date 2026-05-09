@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { sanityClient } from "@/sanity/lib/client";
-import { attribution } from "./format";
+import { displayName } from "./format";
 
 type ApprovedTestimonial = {
   _id: string;
@@ -11,10 +11,12 @@ type ApprovedTestimonial = {
   body: string;
   featured?: boolean;
   approvedAt?: string;
+  relatedWork?: { _id: string; title: string; href?: string; slug: string };
 };
 
 const QUERY = `*[_type == "testimonial" && status == "approved"] | order(featured desc, approvedAt desc, _createdAt desc) {
-  _id, name, role, company, body, featured, approvedAt
+  _id, name, role, company, body, featured, approvedAt,
+  "relatedWork": relatedWork->{ _id, title, href, "slug": slug.current }
 }`;
 
 export const metadata: Metadata = {
@@ -143,20 +145,64 @@ export default async function TestimonialsPage() {
           ) : (
             <ul className="space-y-8">
               {testimonials.map((t) => (
-                <li
-                  key={t._id}
-                  className={`rounded-2xl border p-6 sm:p-8 ${
-                    t.featured
-                      ? "border-brand/40 bg-brand/[0.04] shadow-[0_4px_28px_rgba(0,173,181,0.10)]"
-                      : "border-border bg-bg"
-                  }`}
-                >
-                  <blockquote className="text-lg sm:text-xl leading-relaxed text-text text-balance">
-                    &ldquo;{t.body}&rdquo;
-                  </blockquote>
-                  <p className="mt-5 text-sm font-mono text-text-muted">
-                    — {attribution(t)}
-                  </p>
+                <li key={t._id}>
+                  <figure
+                    className={`relative overflow-hidden rounded-2xl border ${
+                      t.featured
+                        ? "border-brand/40 bg-brand/[0.04] shadow-[0_4px_28px_rgba(0,173,181,0.10)]"
+                        : "border-border bg-bg-card"
+                    } px-7 py-9 sm:px-12 sm:py-12`}
+                  >
+                    {t.featured && (
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute top-2 left-3 sm:top-4 sm:left-6 select-none font-serif text-[6rem] sm:text-[8rem] leading-[0.8] text-brand/25"
+                      >
+                        &ldquo;
+                      </span>
+                    )}
+                    <blockquote className="relative text-lg sm:text-xl leading-relaxed text-text">
+                      {t.body}
+                    </blockquote>
+                    <figcaption className="relative mt-8 pt-6 border-t border-border flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+                      <div>
+                        <p className="font-semibold text-text">
+                          {displayName(t.name)}
+                        </p>
+                        {(t.role || t.company) && (
+                          <p className="mt-0.5 text-sm text-text-muted">
+                            {[t.role, t.company].filter(Boolean).join(", ")}
+                          </p>
+                        )}
+                      </div>
+                      {t.relatedWork && (
+                        <p className="text-xs font-mono text-text-faint">
+                          About:{" "}
+                          {t.relatedWork.href ? (
+                            <a
+                              href={t.relatedWork.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-brand hover:underline"
+                            >
+                              {t.relatedWork.title}
+                              <span className="sr-only">
+                                {" "}
+                                (opens in new tab)
+                              </span>
+                            </a>
+                          ) : (
+                            <Link
+                              href={`/#work-${t.relatedWork.slug}`}
+                              className="text-brand hover:underline"
+                            >
+                              {t.relatedWork.title}
+                            </Link>
+                          )}
+                        </p>
+                      )}
+                    </figcaption>
+                  </figure>
                 </li>
               ))}
             </ul>

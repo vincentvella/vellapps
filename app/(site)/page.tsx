@@ -3,7 +3,7 @@ import Link from "next/link";
 import { sanityClient } from "@/sanity/lib/client";
 import { urlForImage } from "@/sanity/lib/imageUrl";
 import { HOMEPAGE_QUERY, type HomepageContent } from "./queries";
-import { attribution } from "./testimonials/format";
+import { displayName } from "./testimonials/format";
 
 const CALENDLY_URL = "https://calendly.com/vellapps/30min";
 const EMAIL = "vince@vellapps.com";
@@ -129,6 +129,21 @@ export default async function Home() {
     })),
   };
 
+  const reviewLds = testimonials.map((t) => ({
+    "@context": "https://schema.org",
+    "@type": "Review",
+    reviewBody: t.body,
+    author: {
+      "@type": "Person",
+      name: [t.role, t.company].filter(Boolean).join(", ") || t.name,
+    },
+    itemReviewed: {
+      "@type": "ProfessionalService",
+      "@id": "https://vellapps.com/#vellapps",
+      name: "Vellapps LLC",
+    },
+  }));
+
   return (
     <main id="main" className="relative">
       <script
@@ -153,6 +168,14 @@ export default async function Home() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
         />
       )}
+      {reviewLds.map((ld, i) => (
+        <script
+          key={`review-${i}`}
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
+        />
+      ))}
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-border">
         <div className="absolute inset-0 hero-grid pointer-events-none" aria-hidden />
@@ -295,7 +318,7 @@ export default async function Home() {
                 : {};
 
               return (
-                <li key={p._id}>
+                <li key={p._id} id={p.slug ? `work-${p.slug}` : undefined}>
                   <Wrapper
                     {...wrapperProps}
                     className={`group block h-full rounded-xl border border-border bg-bg-card overflow-hidden transition-colors ${
@@ -317,7 +340,7 @@ export default async function Home() {
                             alt={p.alt ?? `${p.title} — ${p.tagline}`}
                             fill
                             sizes="(min-width: 640px) 18vw, 36vw"
-                            priority={i < 2}
+                            priority={i < 4}
                             className="object-cover"
                           />
                         </div>
@@ -329,7 +352,7 @@ export default async function Home() {
                           alt={p.alt ?? `${p.title} — ${p.tagline}`}
                           fill
                           sizes="(min-width: 640px) 50vw, 100vw"
-                          priority={i < 2}
+                          priority={i < 4}
                           className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
                         />
                       </div>
@@ -402,16 +425,36 @@ export default async function Home() {
             </div>
 
             {testimonials.length === 1 ? (
-              <div className="mx-auto max-w-2xl">
-                <div className="rounded-xl border border-border bg-bg-card p-6 sm:p-10 text-center">
-                  <blockquote className="text-lg sm:text-xl leading-relaxed text-text text-balance">
-                    &ldquo;{testimonials[0].body}&rdquo;
+              <figure className="mx-auto max-w-2xl">
+                <div className="relative overflow-hidden rounded-2xl border border-border bg-bg-card px-7 py-9 sm:px-12 sm:py-12">
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute top-2 left-3 sm:top-4 sm:left-6 select-none font-serif text-[6rem] sm:text-[8rem] leading-[0.8] text-brand/25"
+                  >
+                    &ldquo;
+                  </span>
+                  <blockquote className="relative text-lg sm:text-xl leading-relaxed text-text">
+                    {testimonials[0].body}
                   </blockquote>
-                  <p className="mt-6 text-sm font-mono text-text-muted">
-                    — {attribution(testimonials[0])}
-                  </p>
+                  <figcaption className="relative mt-8 pt-6 border-t border-border flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+                    <div>
+                      <p className="font-semibold text-text">
+                        {displayName(testimonials[0].name)}
+                      </p>
+                      {(testimonials[0].role || testimonials[0].company) && (
+                        <p className="mt-0.5 text-sm text-text-muted">
+                          {[testimonials[0].role, testimonials[0].company]
+                            .filter(Boolean)
+                            .join(", ")}
+                        </p>
+                      )}
+                    </div>
+                    {testimonials[0].relatedWork && (
+                      <RelatedWorkLink work={testimonials[0].relatedWork} />
+                    )}
+                  </figcaption>
                 </div>
-              </div>
+              </figure>
             ) : (
               <ul
                 className={`grid gap-5 ${
@@ -421,16 +464,27 @@ export default async function Home() {
                 }`}
               >
                 {testimonials.map((t) => (
-                  <li
-                    key={t._id}
-                    className="rounded-xl border border-border bg-bg-card p-6 sm:p-7"
-                  >
-                    <blockquote className="text-text leading-relaxed text-balance">
-                      &ldquo;{t.body}&rdquo;
-                    </blockquote>
-                    <p className="mt-5 text-sm font-mono text-text-muted">
-                      — {attribution(t)}
-                    </p>
+                  <li key={t._id}>
+                    <figure className="h-full flex flex-col rounded-xl border border-border bg-bg-card p-6 sm:p-7">
+                      <blockquote className="text-text leading-relaxed text-balance">
+                        {t.body}
+                      </blockquote>
+                      <figcaption className="mt-6 pt-5 border-t border-border flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                        <div>
+                          <p className="text-sm font-semibold text-text">
+                            {displayName(t.name)}
+                          </p>
+                          {(t.role || t.company) && (
+                            <p className="mt-0.5 text-xs text-text-muted">
+                              {[t.role, t.company].filter(Boolean).join(", ")}
+                            </p>
+                          )}
+                        </div>
+                        {t.relatedWork && (
+                          <RelatedWorkLink work={t.relatedWork} />
+                        )}
+                      </figcaption>
+                    </figure>
                   </li>
                 ))}
               </ul>
@@ -654,6 +708,32 @@ export default async function Home() {
         </div>
       </footer>
     </main>
+  );
+}
+
+function RelatedWorkLink({
+  work,
+  className,
+}: {
+  work: { title: string; href?: string; slug: string };
+  className?: string;
+}) {
+  const isExternal = Boolean(work.href);
+  const href = work.href ?? `#work-${work.slug}`;
+  return (
+    <p className={`text-xs font-mono text-text-faint ${className ?? ""}`}>
+      About:{" "}
+      <a
+        href={href}
+        {...(isExternal
+          ? { target: "_blank", rel: "noopener noreferrer" }
+          : {})}
+        className="text-brand hover:underline"
+      >
+        {work.title}
+        {isExternal ? <span className="sr-only"> (opens in new tab)</span> : null}
+      </a>
+    </p>
   );
 }
 

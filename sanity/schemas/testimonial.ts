@@ -97,6 +97,14 @@ export const testimonial = defineType({
       description: "Captured at submission for audit / spam triage.",
     }),
     defineField({
+      name: "relatedWork",
+      title: "About this project",
+      type: "reference",
+      to: [{ type: "workItem" }],
+      description:
+        "Optional. Links the testimonial to the project it's about so the public card can deep-link to the work.",
+    }),
+    defineField({
       name: "internalNotes",
       title: "Internal notes",
       type: "array",

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { useActionState } from "react";
-import { attribution, displayName } from "../format";
+import { displayName } from "../format";
 import { submitTestimonial, type SubmitState } from "./actions";
 
 const initialState: SubmitState = { status: "idle" };
@@ -262,27 +262,33 @@ export function SubmitForm() {
           >
             Public preview
           </h2>
-          <div className="rounded-2xl border border-border bg-bg p-6">
-            <blockquote className="text-base sm:text-lg leading-relaxed text-text text-balance">
+          <figure className="relative overflow-hidden rounded-2xl border border-border bg-bg-card px-6 py-7 sm:px-8 sm:py-9">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute top-2 left-3 select-none font-serif text-[5rem] leading-[0.8] text-brand/25"
+            >
+              &ldquo;
+            </span>
+            <blockquote className="relative text-base sm:text-lg leading-relaxed text-text">
               {body.trim() ? (
-                `“${body.trim()}”`
+                body.trim()
               ) : (
                 <span className="text-text-faint italic">
                   Your testimonial will appear here…
                 </span>
               )}
             </blockquote>
-            <p className="mt-4 text-sm font-mono text-text-muted">
-              —{" "}
-              {name.trim() || company.trim()
-                ? attribution({
-                    name: name.trim() || "—",
-                    role: role.trim() || undefined,
-                    company: company.trim() || undefined,
-                  })
-                : "—"}
-            </p>
-          </div>
+            <figcaption className="relative mt-6 pt-5 border-t border-border">
+              <p className="font-semibold text-text">
+                {name.trim() ? displayName(name) : "—"}
+              </p>
+              {(role.trim() || company.trim()) && (
+                <p className="mt-0.5 text-sm text-text-muted">
+                  {[role.trim(), company.trim()].filter(Boolean).join(", ")}
+                </p>
+              )}
+            </figcaption>
+          </figure>
           <p className="text-xs text-text-faint">
             Your email and full last name are never displayed.
           </p>
