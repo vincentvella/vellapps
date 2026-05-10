@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "sanity:extract": "sanity schema extract --enforce-required-fields --path=./schema.json",
-    "sanity:types": "bun run sanity:extract && sanity typegen generate"
+    "sanity:types": "bun run sanity:extract && sanity typegen generate",
+    "submit": "bun --env-file=.env.local run scripts/submit.ts"
   },
   "dependencies": {
     "@sanity/vision": "^5.24.0",

@@ -39,6 +39,9 @@ yarn-error.log*
 # sanity build artifact (regenerate via `bun run sanity:types`)
 /schema.json
 
+# IndexNow per-domain keys (private, not meant for git)
+/scripts/.indexnow-keys.json
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
