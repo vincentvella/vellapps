@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   description:
     "Custom websites and iPhone / Android apps, built by hand by Vince Vella. Site rescues, redesigns, take-overs from previous developers, and small fixes. Free 30-minute intro call, fixed-price quotes, no retainers.",
   applicationName: "Vellapps",
-  authors: [{ name: "Vincent Vella", url: "https://www.vincevella.com" }],
+  authors: [{ name: "Vincent Vella", url: "https://vincevella.com" }],
   creator: "Vincent Vella",
   publisher: "Vellapps LLC",
   category: "technology",

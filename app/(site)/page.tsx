@@ -72,7 +72,8 @@ export default async function Home() {
     sameAs: [
       GITHUB_URL,
       LINKEDIN_URL,
-      "https://www.vincevella.com",
+      "https://vincevella.com",
+      "https://vincentvella.me",
     ],
     jobTitle: "Software Engineer",
     email: `mailto:${EMAIL}`,
@@ -687,6 +688,17 @@ export default async function Home() {
               >
                 Privacy
               </Link>
+            </li>
+            <li>
+              <a
+                href="https://vincevella.com"
+                target="_blank"
+                rel="me author noopener noreferrer"
+                className="hover:text-brand transition-colors"
+              >
+                Personal site
+                <span className="sr-only"> (opens in new tab)</span>
+              </a>
             </li>
             <li>
               <a
