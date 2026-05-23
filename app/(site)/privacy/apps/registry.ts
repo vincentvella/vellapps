@@ -62,6 +62,17 @@ export const APPS: Record<string, AppPrivacy> = {
     ],
     hasAccountDeletion: true,
   },
+  bonfire: {
+    name: "Bonfire Party Games",
+    tagline: "Local-multiplayer party games",
+    collects: [
+      "Nothing on a server. Bonfire is local-only — the nickname you choose, the role you're dealt, and any game state stay on your device or are broadcast only to other phones in the same room over Bluetooth and your local Wi-Fi network.",
+      "An anonymous device id (identifierForVendor on iOS, ANDROID_ID on Android) used by the room's host phone to recognize you across reconnects within a game. The id never leaves the local Bluetooth/Wi-Fi session.",
+      "Bluetooth and Local Network permissions are used solely for in-room peer-to-peer play. The app does not scan for nearby people outside an active game lobby, does not log Bluetooth or Wi-Fi data anywhere, and does not transmit any of it off your device.",
+    ],
+    thirdParties: [],
+    hasAccountDeletion: false,
+  },
 };
 
 export function deriveAppFromSlug(slug: string): AppPrivacy {
