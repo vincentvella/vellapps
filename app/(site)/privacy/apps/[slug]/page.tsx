@@ -93,7 +93,7 @@ export default async function AppPrivacyPage({
               {app.name} privacy
             </h1>
             <p className="mt-4 text-sm text-text-faint font-mono">
-              Last updated: {LAST_UPDATED}
+              Last updated: {app.lastUpdated ?? LAST_UPDATED}
             </p>
           </div>
         </div>
