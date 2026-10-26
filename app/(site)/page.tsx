@@ -9,6 +9,7 @@ const CALENDLY_URL = "https://calendly.com/vellapps/30min";
 const EMAIL = "vince@vellapps.com";
 const GITHUB_URL = "https://github.com/vincentvella";
 const LINKEDIN_URL = "https://www.linkedin.com/in/vincent-vella";
+const MERCH_URL = "https://www.etsy.com/shop/EscToInterrupt";
 
 export const revalidate = 60;
 
@@ -680,7 +681,7 @@ export default async function Home() {
               © {new Date().getFullYear()} Vellapps LLC
             </p>
           </div>
-          <ul className="flex items-center gap-6 text-text-muted">
+          <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-text-muted">
             <li>
               <Link
                 href="/privacy"
@@ -697,6 +698,17 @@ export default async function Home() {
                 className="hover:text-brand transition-colors"
               >
                 Personal site
+                <span className="sr-only"> (opens in new tab)</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href={MERCH_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-brand transition-colors"
+              >
+                Merch
                 <span className="sr-only"> (opens in new tab)</span>
               </a>
             </li>
